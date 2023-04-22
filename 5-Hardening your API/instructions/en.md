@@ -256,7 +256,7 @@ Apigee provides a policy that can validate the payload provided in Task 2 and ra
 
 6. In the development panel, click the + icon (![icon](images/plus.png)) for the **Proxy Endpoint default > Request > Suppliers** conditional flow.
  
-7. In the dialogs, click the **Select existing policy** dropdown, select **Create new policy**, and select the **JSON Threat Protection** policy from the Security group.
+7. In the dialogs, select **Create new policy**, and select the **JSON Threat Protection** policy from the Security group.
 
 8. Set the policy properties as follows.
 
@@ -265,7 +265,7 @@ Apigee provides a policy that can validate the payload provided in Task 2 and ra
     | Name | **JSONTP-Suppliers** |
     | Display name | **JSONTP-Suppliers** |
 
-9. In the dropdown, select **JSONTP-Suppliers** and click **Add**.
+9. Click **Add**.
 
 10. In the development panel, locate the policy inside the **Suppliers** conditional flow and click the **JSONTP-Suppliers** link.
 

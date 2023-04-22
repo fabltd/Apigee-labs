@@ -1,4 +1,277 @@
-# Securing Backend Access
+## Overview
+
+In this lab, you will provison Apigee X, explore the legacy API and fix its security. The legacy API is deployed on Google Compute Engine. Due to a configuration error the API is publicly exposed. It was never designed for the public internet so there is is no security.
+
+You will search for and uncover the security vulnerabilities in the API. This Lab is split into 3 parts. Later in the lab, you use Apigee to correct these vulnerabilities.
+
+Apigee takes around 40 minutes to fully provision. Your instructor will walk you through the first task. You will then be able to proceed with the other tasks while you wait for Apigee to be available.
+
+## Part 1 - Installing Apigee and introducing the Legacy
+
+## Objectives
+
+In this part of the lab, you learn how to:
+- Deploy an Apigee X Evaulation Organization 
+- Exploit security vulnerabilities in a legacy API using a test page left in place by the development team 
+- Remove public access to an API deployed to Compute Engine
+
+## Setup and Requirements
+
+![[/fragments/start-qwiklab]]
+
+
+![[/fragments/cloudshell]]
+
+
+![[/fragments/apigeex-console]]
+
+
+## Task 1. Install Apigee X
+
+1. After logging into the Google Cloud Console, in the left navigation menu, select **Integration Services > Apigee API Management**. 
+
+    ![screenshot of Apigee](images/apigee.png "screenshot")
+
+2. To start the setup wizard, click **Set Up Apigee**.
+
+3. Click **Enable APIs**. 
+
+4. In the **Set up networking** step, click **Next**.
+
+5. In the **Configure hosting and encryption** step, click **Next**.
+
+6. In the **Customize access routing** step, click **Next**, and then **Submit**.
+
+    <ql-infobox>
+    Provisioning can take up to 1 hour. Leave the browser tab open and proceed to the next task.
+    </ql-infobox>
+
+
+## Task 2. Explore the Legacy API
+
+# Introduction to the Journey 
+
+## Situational overview
+
+Welcome to MegaHot Corp., stylized as MHC. You've join the MHC technology team. You are the product lead for the new application “Show Me Now", stylized as SMN.
+
+![Show Me Now](images/showmenow.png)
+
+MHC has identified that many logistic companies have limited tracking information provided to their customers. Often the tracking is not updated until the package has reached the destination. 
+
+The developers on your team have identified that more in-depth tracking details can be obtained from a legacy application. This system is currently part of the call center stack and as a result, there can be no change to this application. 
+
+Show Me Now aims to extract this information and make it available to customers. Management has identified that SMN will reduce the number of calls to your call center as users will have a more in-depth picture. 
+
+SMN will be released as a web application and as a set of APIs for use by third parties. 
+
+You will explore how to deliver SMN in a secure way using Apigee. Each lab will see you approach a different task until you have a complete solution.
+
+Along the way, you will be able to experiment with the data. Can you break it? Can you bring out your hacking skills? The best way to secure any application is to break it first to find the weaknesses and to lock them down.
+
+We have the tools but how do we implement them?
+
+
+1. Leave the existing browser tab where apigee is provisioning open, and open a second browser tab.
+
+2. In the second tab, navigate to the the Google Cloud console at **https://console.cloud.google**.
+
+3. In the Google Cloud console, from the Navigation menu (![Navigation menu icon](https://storage.googleapis.com/cloud-training/images/menu.png)), select __Compute Engine and VM instances__.
+
+4. In the Compute Engine VM instances pane, locate the VM named __legacy-api__ and click the more actions icon (![more actions icon](images/actions.png)).
+
+5. Select **View network details** and copy the __External IP__. Open a new browser tab and paste the IP address into the address bar.
+
+    <ql-infobox>
+    The developer of the legacy API appears to have left a test page exposed. You should see the “Shipping API Tester”.
+    </ql-infobox>
+
+5. Select the following: (Hint: They are prepopulated.)
+
+    | Property | Value |
+    | --- | --- |
+    | METHOD | **GET** |
+    | PATH | **/v1/customers** |
+    | EMAIL | **abischof1d@google.com** |
+
+6. Click **Send**. You should see the customer details in the **Return from API** text box.
+
+    <ql-infobox>
+    This shows that the legacy API returns specific data when requested. But what happens if you make a less specific request than the developer intended?
+    </ql-infobox>
+
+7. Remove the email address and click **Send**. This time the API exposes all of MHC’s customers.
+
+    <ql-infobox>
+    Hint: If the Return from API box is too small, you can drag the handle in the bottom-right corner to resize.
+    </ql-infobox>
+
+    ![screenshot of text box](images/return_send.png "screenshot")
+
+8. Change the **Path** and experiment to discover if __orders__ and __shipments__ have the same vulnerability as __customers__.
+
+## Task 3. Investigate security vulnerabilities
+
+1. Refresh the Shipping API Tester and then select and set the following:
+
+    | Property | Value |
+    | --- | --- |
+    | METHOD | **GET** |
+    | PATH | **/v1/customers** |
+    | EMAIL | **hacked@google.com** |
+
+2. Click **Send** and examine the return, if any.
+
+    <ql-infobox>
+    The API returns an empty object inside a result array. This customer does not exist.
+    </ql-infobox>
+
+3. Remove the email address from the text box and click **Send** to return all customer records.
+
+4. Copy any JSON object from the output, or use the example below. Be careful to include both the object's surrounding curly braces { }. 
+
+    ```json
+    {
+      "Email": "abischof1d@google.com",
+      "StateOrProvince": "Florida",
+      "FirstName": "Anastasia",
+      "Address2": "Room 496",
+      "PostalCode": "32825",
+      "LastName": "Bischof",
+      "Country": "United States",
+      "StreetAddress": "83480 Sachtjen Parkway"
+    }
+    ```
+
+5. Paste the JSON object into the __JSON Payload (optional)__ text box and change the Email from *abischof1d@google.com* to __hacked@google.com__.
+
+6. Confirm that the JSON Payload is similar to this:
+
+    ```json
+    {
+      "Email": "hacked@google.com",
+      "StateOrProvince": "Florida",
+      "FirstName": "Anastasia",
+      "Address2": "Room 496",
+      "PostalCode": "32825",
+      "LastName": "Bischof",
+      "Country": "United States",
+      "StreetAddress": "83480 Sachtjen Parkway"
+    }
+    ```
+
+7. Change the **Method** to **Post** and click **Send**. You should see the following message:
+
+    ```json
+    {
+      "api": "Customers",
+      "msg": "Customer created or updated"
+    }
+    ```
+
+    <ql-infobox>
+    The test page allows customers to be added to MHC’s database without any validation or security. 
+    </ql-infobox>
+
+8. Select or set the following and click **Send**:
+
+    | Property | Value |
+    | --- | --- |
+    | METHOD | **Get** |
+    | PATH | **/v1/customers** |
+    | EMAIL | **hacked@google.com** |
+
+9. Verify that you now see a customer record for hacked@google.com
+
+10.  Bonus: Try altering different fields and emails. Do you see more customer records?
+
+## Task 4. Explore the severity of the security vulnerabilities
+
+1. Refresh the **Shipping API Tester** and then set the following as the entire content of the JSON Payload text box:
+
+    ```json
+    {
+        "Email": "hacked@google.com",
+        "PostalCode": "32825",
+        "StateOrProvince": "Florida",
+        "LastName": "Bischof",
+        "FirstName": "Anastasia",
+        "Country": "United States",
+        "Address2": "Room 496",
+        "StreetAddress": "83480 Sachtjen Parkway"
+      }
+    ```
+2. Add the following snippet of JSON immediately after the opening {
+
+    ```json
+    "Junk " :  "This is a very vulnerable API",  
+    ```
+
+3. Your JSON Payload should look like this:
+
+    ```json
+    {
+      "Junk " : "This is a very vulnerable API",  
+      "Email": "hacked@google.com",
+      "PostalCode": "32825",
+      "StateOrProvince": "Florida",
+      "LastName": "Bischof",
+      "FirstName": "Anastasia",
+      "Country": "United States",
+      "Address2": "Room 496",
+      "StreetAddress": "83480 Sachtjen Parkway"
+      }
+    ```
+
+4. Change the **Method** to **Post** and click **Send**. You should see the following message:
+
+    ```json
+    {
+      "api": "Customers",
+      "msg": "Customer created or updated"
+    }
+    ```
+
+    <ql-infobox>
+    If you don’t see the above message, your JSON payload was probably malformed. Check for missing commas, quotation marks, and curly braces.
+    </ql-infobox>
+
+5. Select or set the following and click **Send**:
+
+    | Property | Value |
+    | --- | --- |
+    | METHOD | **GET** |
+    | PATH | **/v1/customers** |
+    | EMAIL | **hacked@google.com** |
+
+6. Confirm that the __Junk__ field is now part of the returned record. 
+
+## Task 5. Reduce the attack vector
+
+The Legacy API is highly insecure and cannot be used in its current state. We will explore ways to secure access in subsequent labs. For now, we need to implement a quick security fix by removing the external IP address from the VM.
+
+1. In the Google Cloud console, from the Navigation menu (![Navigation menu icon](https://storage.googleapis.com/cloud-training/images/menu.png)), select __Compute Engine and VM instances__.
+
+2. In the Compute Engine VM instances pane, click the link __legacy-api__ in the __Name__ column.
+
+3. In the top menu bar on the next page, click **Edit**. 
+
+4. In the **Network interfaces** section, click the **mhc-network mhc-subnetwork** network interface to open the __Edit network interface__ dialog. 
+
+5. Click the **External IP v4 address** dropdown and change the value to **None** to remove the External (Public) IP Address, and then click __Done__ and __Save__.
+
+    ![network interfaces dialog](images/external.png "network interfaces dialog")
+
+6. From the side menu, select **VM Instances**. Verify that the legacy-api VM no longer has an entry in the **External IP** column.
+
+### **Congratulations!** You have established that the legacy API has significant security vulnerabilities. You removed the External (Public) IP Address to ensure that it is no longer accessible except to other internal MHC systems.
+
+## Wait for your instructor before continuing to Part 2. Your instructor will introduce the security measure you will implement to allow secure Target access. 
+
+ ![Stop sign](images/stop.png "stop sign")
+
+
+## Part 2 - Securing Backend Access
 
 ## Overview
 
@@ -12,29 +285,49 @@ In this lab, you learn how to:
 - Establish an initial connection to Apigee
 
 
-## Setup and Requirements
+## Task 1. Create the gateway reverse proxy
+
+You create an Nginx gateway to act as a reverse proxy for the legacy API. A helper script has been created to assist in creating the gateway. 
+
+1. Return to the Cloud console and click **Activate Cloud Shell** (![Activate Cloud Shell icon](images/activate_shell.png)) in the top menu to open Cloud Shell.
+
+2. To ensure that you are in the Cloud Shell home directory, execute the following command.
+
+    ```bash
+    cd ~ 
+    ```
+
+3. Clone the class repository and move into the repository root folder.
+
+    ```bash
+    git clone https://github.com/fabltd/Apigee-utils
+    cd Apigee-utils
+    ```
+
+    <ql-infobox>
+    The following step runs a script that includes ssh access to the generated VM. You may see errors as it attempts to connect. You can safely ignore these errors.
+    </ql-infobox>
+
+4. Create and configure the gateway using the following bash script.
+
+   ```bash
+    ./setup/scripts/lab2/install.sh
+    ```
+
+5. Wait for the script to complete and then proceed to Task 2.
 
 
-![[/fragments/start-qwiklab]]
-
-
-![[/fragments/cloudshell]]
-
-
-![[/fragments/apigeex-console]]
-
-
-## Task 1. Explore the gateway
+## Task 2. Explore the gateway
 
 1. In the Google Cloud console, from the Navigation menu (![Navigation menu icon](https://storage.googleapis.com/cloud-training/images/menu.png)), select __Compute Engine and VM instances__.
 
 2. In the Compute Engine VM instances pane, locate the VM named __gateway__ and copy the __External IP__. Open a new browser tab and paste the IP address into the address bar.
 
     <ql-infobox>
-    You should see that you can again get access to the <b>Shipping API Tester</b>. This is because the VM has been provisioned with NGINX to operate as a reverse proxy.
+    You should see that you can again get access to the <b>Shipping API Tester</b>. This is because the VM has been provisioned with Nginx to operate as a reverse proxy.
     </ql-infobox>
 
-3. Return to the Cloud console and click **Activate Cloud Shell** (![Activate Cloud Shell icon](images/activate_shell.png)) in the top menu to open Cloud Shell.
+3. Return to the Cloud console and if necessary click **Activate Cloud Shell** (![Activate Cloud Shell icon](images/activate_shell.png)) in the top menu to open Cloud Shell.
 
 4. In Cloud Shell, set the default compute zone to the zone used by the gateway vm, replacing [us-east1-b] in the following code with your zone.
 
@@ -55,7 +348,7 @@ In this lab, you learn how to:
 6. When the prompt changes indicating you are connected to the gateway, execute the following command.
 
     ```bash
-    cat /etc/nginx/sites-enabled/reverse-proxy.conf 
+    cat /etc/Nginx/sites-enabled/reverse-proxy.conf 
     ```
 
 7. Confirm that the output is similar to this.
@@ -73,14 +366,14 @@ In this lab, you learn how to:
     The actual IP address is the IP address of your legacy API VM.
     </ql-infobox>
 
-8. This configuration tells Nginx to pass any incoming requests on to the internal IP of our legacy API. This recreates the problem from Lab 1; the insecure API is once again exposed to the internet.
+8. This configuration tells Nginx to pass any incoming requests on to the internal IP of our legacy API. This recreates the problem from Part 1; the insecure API is once again exposed to the internet.
 
 9. In Cloud Shell, type **exit** to terminate the SSH session and return your terminal session to the Cloud Shell instance.
 
 10. Verify that the prompt has changed from username@**gateway** to username@**cloudshell**. You should also see the project id in yellow. 
 
 
-## Task 2. Generate and install the certificates
+## Task 3. Generate and install the certificates
 
 You implement Mutual Transport Layer Security (mTLS) to force connections to present a client certificate to access the gateway and the legacy API. A helper script and updated gateway configuration have been created to assist in generating and applying a certificate authority and client/server certificates. 
 
@@ -88,13 +381,6 @@ You implement Mutual Transport Layer Security (mTLS) to force connections to pre
 
     ```bash
     cd ~ 
-    ```
-
-2. Clone the class repository and move into the repository root folder.
-
-    ```bash
-    git clone https://github.com/fabltd/Apigee-utils
-    cd Apigee-utils
     ```
 
 3. To ensure the default compute zone is still set, once again execute the following command, replacing [us-east1-b] with your zone.
@@ -110,10 +396,11 @@ You implement Mutual Transport Layer Security (mTLS) to force connections to pre
 4. To set up the certificates, execute the following code to run the certs helper.
 
     ```bash
-    ./student-scripts/certs.sh
+    ./Apigee-utils/student-scripts/certs.sh
     ```
+
     <ql-infobox>
-    Be careful not to miss the ./ before certs.sh
+    Be careful not to miss the ./ before Apigee-utils/
     </ql-infobox>
 
 5. To verify that the helper created a directory called mTLS that contains the certificates, execute the following command.
@@ -136,7 +423,7 @@ You implement Mutual Transport Layer Security (mTLS) to force connections to pre
     The Validity section at the top of the text output shows that our CA is valid for one year. 
     </ql-infobox>
 
-7. To install the server certificates/certificate and authority to the gateway and reconfigure NGINX to use mTLS, execute the following command to run a helper script.
+7. To install the server certificates/certificate and authority to the gateway and reconfigure Nginx to use mTLS, execute the following command to run a helper script.
 
     ```bash
     cd ~/Apigee-utils/student-scripts
@@ -154,7 +441,7 @@ You implement Mutual Transport Layer Security (mTLS) to force connections to pre
     ```
 
     <ql-infobox>
-    The script sets a Compute Engine zone environment variable, then copies the certificates to the Compute Engine instance (VM), moves these to the correct location, and copies over a revised NGINX conf.
+    The script sets a Compute Engine zone environment variable, then copies the certificates to the Compute Engine instance (VM), moves these to the correct location, and copies over a revised Nginx conf.
     </ql-infobox>
 
 9. Verify that the compute/zone is still set by executing the following command.
@@ -235,21 +522,20 @@ You implement Mutual Transport Layer Security (mTLS) to force connections to pre
     ```
 
     <ql-infobox>
-    In the output, <b>CN</b> is Common Name, set in our script. The port on the gateway is 443 as this is https traffic. The 418 status code is the NGINX error code configured by our script to be returned when no client certificate is provided to validate the request. 
+    In the output, <b>CN</b> is Common Name, set in our script. The port on the gateway is 443 as this is https traffic. The 418 status code is the Nginx error code configured by our script to be returned when no client certificate is provided to validate the request. 
     </ql-infobox>
 
 
-## Task 3. Configure Apigee for mTLS
+## Task 4. Configure Apigee for mTLS
 
-You have now configured sufficient infrastructure to allow you to set up Apigee with a  reverse proxy and mTLS configuration. This allows you to call the legacy backend. However, it once again exposes the insecure legacy API. You correct this in a later lab using Apigee policies.
+You have now configured sufficient infrastructure to allow you to set up Apigee with a reverse proxy and mTLS configuration. This allows you to call the legacy backend. However, it once again exposes the insecure legacy API. You correct this in a later lab using Apigee policies.
 
 1. In a different browser tab within the same window, open the Apigee console at [apigee.google.com](https://apigee.google.com/).
 
     <ql-infobox>
-    The Apigee console is accessed on a different URL from the Google Cloud console. An Apigee organization with the same name as the Google Cloud project has been created for you.
+    This is an alternative Apigee console that is is accessed on a different URL from the Google Cloud console. An Apigee organization with the same name as the Google Cloud project was created when you installed Apigee.
     </ql-infobox>
 
-    Alternatively, to open the Apigee console from the Google Cloud console Navigation menu (![Navigation menu icon](https://storage.googleapis.com/cloud-training/images/menu.png)), select <b>Tools > Apigee</b>.
 
 2. In the left navigation menu of the Apigee browser tab, select **Develop > API Proxies**.
 
@@ -263,7 +549,7 @@ You have now configured sufficient infrastructure to allow you to set up Apigee 
     | --- | --- |
     | Name | **SMN-Labs** |
     | Basepath | **/show-me-now/v0** |
-    | Description | **Show Me Now - LAB2** |
+    | Description | **Show Me Now - LAB1** |
     | Target URL | **https://[EXTERNAL-IP]** |
 
     <ql-infobox>
@@ -327,14 +613,14 @@ You have now configured sufficient infrastructure to allow you to set up Apigee 
 
 14. Click **Save**.
 
-## Task 4. Add mTLS keys to Apigee and test
+## Task 5. Add mTLS keys to Apigee and test
 
 The Apigee instance requires the client certificates and the certificate authority in order establish a connection to our gateway. These are currently missing.
 
 1. In the left navigation menu, select **Admin > Environments > TLS Keystores**. This should be empty. 
 
     <ql-infobox>
-    <b>Note</b>: You could add your keys manually but that involves downloading them to our local machine and uploading them individually. Instead, you execute a script that calls the Apigee management API.  
+    <b>Note</b>: You could add your keys manually but that involves downloading them to your local machine and uploading them individually. Instead, you execute a script that calls the Apigee management API.  
     </ql-infobox>
 
 2. Return to the previous browser tab which has Cloud console open.
@@ -362,17 +648,17 @@ The Apigee instance requires the client certificates and the certificate authori
 
 8. In the left navigation menu, select **Develop > API Proxies > SMN-Labs** Click **Develop** and **Deploy**.
 
-9. In the Deploy dialog, click __Deploy__.
+9. In the Deploy dialog, select **1** in the revision box, then click __Deploy__.
 
 10. In the confirm dialog, click __Confirm__ and wait until the revision has finished deploying.
 
 11. In the top menu, click **Overview**.
 
-12. In the Deployments section, verify that the status column has a green checkmark beside **eval** for **Revision 1**.
+12. In the Deployments section, verify that the status column has a green checkmark beside **test-env** for **Revision 1**.
 
     ![deployment status](images/deploy.png)
 
-13. In the left navigation menu, select **Admin > Environments > Groups** and copy the hostname from __eval-group__. If there is more than one, copy the hostname that includes an IP Address.
+13. In the left navigation menu, select **Admin > Environments > Groups** and copy the hostname from __test-env__. If there is more than one, copy the hostname that includes an IP Address.
 
     ![hostname](images/hostname.png)
 
@@ -402,7 +688,7 @@ The Apigee instance requires the client certificates and the certificate authori
     You should see all customers in JSON format. The API is not currently secure.
     </ql-infobox>
 
-## Task 5. Fix the path and add basic security
+## Task 6. Fix the path and add basic security
 
 Currently, Apigee forwards anything that is added to the end of the base path **show-me-now/v0** to the gateway, and thus to the legacy API. The test page does not add the Apigee base path to the URL, but there is nothing to stop a malicious actor from adding **/v1/customers**, or anything else, to a request to the Apigee base path, and having it forwarded to the legacy API. Access to the test page and any unwanted routes can be prevented using **Conditional Flows** and **Fault Rules**.
 
@@ -443,30 +729,24 @@ Currently, Apigee forwards anything that is added to the end of the base path **
 
     ![add preflow policy](images/preflow.png)
 
-8. In the dialog, click the **Select existing policy** dropdown and select **Create new policy**. 
+8. In the dialog, select **Create new policy** option. 
 
-9. In the next dialog, from the **Mediation** group, select the **Assign Message** policy. 
+9. In the dropdown, from the **Mediation** group, select the **Assign Message** policy. 
 
-10. Set the following properties and click **Create**. 
+10. Set the following properties and click **Add**. 
 
     | Property | Value |
     | --- | --- |
     | Name | **AM-remove-suffix** |
     | Display name | **AM-remove-suffix** |
 
-    <ql-infobox>
-    You are returned to the Add policy step dialog. 
-    </ql-infobox>
-
-11. In the dropdown, select **AM-remove-suffix** and click **Add**.
-
-12. In the development panel, locate the policy inside the preflow and click the **AM-remove-suffix** link.
+11. In the development panel, locate the policy inside the preflow and click the **AM-remove-suffix** link.
 
     <ql-infobox>
     The development panel now shows just the policy and its XML. 
     </ql-infobox>
 
-13. Delete all the existing XML for the **AM-remove-suffix** policy and replace it with the following.
+12. Delete all the existing XML for the **AM-remove-suffix** policy and replace it with the following.
 
     ```xml
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -485,9 +765,9 @@ Currently, Apigee forwards anything that is added to the end of the base path **
     This policy removes the Apigee base path. You now use a postflow policy and policies inside your conditional flows to create a <b>dynamic_path</b> variable to hold the correct path for the legacy API.
     </ql-infobox>
 
-14. In the development view navigator panel, click **Target endpoints  > default >  PostFlow** to open the **Target endpoints** in the development panel with the PostFlow highlighted.
+13. In the development view navigator panel, click **Target endpoints  > default >  PostFlow** to open the **Target endpoints** in the development panel with the PostFlow highlighted.
 
-15. To amend the target URL, locate the ```<URL>``` element inside the XML panel and add the following to the end of the IP address.
+14. To amend the target URL, locate the ```<URL>``` element inside the XML panel and add the following to the end of the IP address.
 
     ```
     /v1/{dynamic_path}
@@ -505,26 +785,24 @@ Currently, Apigee forwards anything that is added to the end of the base path **
     The conditional flows need to create the <b>dynamic_path</b> variable so that it is available for the PostFlow.
     </ql-infobox>
 
-16. In the development navigator panel, click **Proxy endpoints - default** to open the **Proxy** endpoint in the development panel.
+15. In the development navigator panel, click **Proxy endpoints - default** to open the **Proxy** endpoint in the development panel.
 
-17. In the development panel, click the + icon (![icon](images/plus.png)) for the **Proxy Endpoint default > Request > Customers** conditional flow.
+16. In the development panel, click the + icon (![icon](images/plus.png)) for the **Proxy Endpoint default > Request > Customers** conditional flow.
 
     ![add policy to conditional flow](images/customers.png)
 
-18. In the dialogs, click the **Select existing policy** dropdown, select **Create new policy** and select the **Assign Message** policy from the **Mediation** group. 
+17. In the dialogs,select **Create new policy** and select the **Assign Message** policy from the **Mediation** group. 
 
-19. Set the following properties and click **Create**. 
+18. Set the following properties and click **Add**. 
 
     | Property | Value |
     | --- | --- |
     | Name | **AM-Set-Customers** |
     | Display name | **AM-Set-Customers** |
 
-20. In the dropdown, select **AM-Set-Customers** and click **Add**.
+19. In the development panel, locate the policy inside the **Customers** conditional flow and click the **AM-Set-Customers** link.
 
-21. In the development panel, locate the policy inside the **Customers** conditional flow and click the **AM-Set-Customers** link.
-
-22. Delete all the existing XML for the **AM-Set-Customers** policy and replace it with the following.
+20. Delete all the existing XML for the **AM-Set-Customers** policy and replace it with the following.
 
     ```xml
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -538,14 +816,14 @@ Currently, Apigee forwards anything that is added to the end of the base path **
     </AssignMessage>
     ```
 
-23. Click **Save** and **Deploy**.
+21. Click **Save**, confirm you are saving as a new revision, and then **Deploy**.
 
-24. In the Deploy dialog, click __Deploy__ and then __Confirm__ and wait until the revision has finished deploying.
+22. In the Deploy dialog, select revision **2**, click __Deploy__, and then __Confirm__ and wait until the revision has finished deploying.
 
-25. To verify that revision 2 has been deployed to eval, click **Overview** and check the **Status** and **Revision 2** columns.
+23. To verify that revision 2 has been deployed to eval, click **Overview** and check the **Status** and **Revision 2** columns.
 
 
-## Task 6. Test the path and provide a more suitable error response
+## Task 7. Test the path and provide a more suitable error response
 
 The policies added in the previous task make it possible to call GET for **/customers**. The empty path **/** now returns an error message. 
 
@@ -739,5 +1017,190 @@ The Suppliers and Shipments paths are both unsecured. In the bonus, you create n
     Both commands should successfully return data.
     </ql-infobox>
 
+## Wait for your instructor before continuing to Part 3. 
+
+
+ ![Stop sign](images/stop.png "stop sign")
+
+
+## Part 3 - Securing the API with an API Key
+
+## Overview
+
+In this part of the lab, you add an API Key to your proxy to prevent unauthorized access and to track usage.
+
+## Objectives
+
+In this lab, you learn how to:
+- Implement a Verify API Key policy
+- Add a developer and application
+- Verify that the proxy is now secure
+
+## Task 1. Add a Verify API Key policy (VAK) to your API proxy
+
+1. In a separate browser tab from Google Cloud console, open the Apigee console at [apigee.google.com](https://apigee.google.com/).
+    
+2. Verify that your Apigee Organization is selected at the top of the console.
+
+3. In the left navigation menu, select **Develop > API Proxies**.
+
+4. From the proxy list, select **SMN-Labs**. To switch to the development view, click **Develop**.
+
+5. In the development view navigator panel, click **Proxy endpoints > default** to open the Proxy endpoint in the development panel.
+
+    **Note:** Be sure to click the **Proxy** not the Target **endpoints**.
+
+    ![add preflow policy](images/proxy.png)
+
+6. In the development panel, click the + icon (![icon](images/plus.png)) for the **Proxy endpoints default > Request > PreFlow** to create a new policy.
+
+    ![add preflow policy](images/preflow.png)
+
+7. In the dialog, select **Create new policy**, and in the dropdown select the **Verify API Key** policy from the **Security** group. 
+
+8. Set the following properties and click **Create**. 
+
+    | Property | Value |
+    | --- | --- |
+    | Name | **VAK-API-Key** |
+    | Display name | **VAK-API-Key** |
+
+9. In the development panel, locate the policy inside the Preflow and click the **VAK-API-Key** link.
+
+10. Inside the XML, locate the ```<APIKey>``` element and modify the configuration to expect the API key as a header rather than a query parameter.
+
+    **Replace:**
+
+    ```xml
+    <APIKey ref="request.queryparam.apikey"/>
+    ```
+
+    **With:**
+
+    ```xml
+    <APIKey ref="request.header.apikey"/>
+    ```
+
+11. Click **Save** and **Save as new revision**.
+
+12. Click **Deploy** to open the dialog, click **Deploy** in the dialog, and finally click **Confirm** in the second dialog.
+
+
+## Task 2: Create an API Product
+
+1. In the left navigation menu, select **Publish > API Products**.
+
+2. To create a new API product, click **+Create**.
+
+3. In the **Product details** pane, specify the following, leaving **Environment** blank.
+
+    | Property | Value |
+    | --- | --- |
+    | Name | **show-me-now** |
+    | Display name | **Show Me Now** |
+    | Description | **Show Me Now Full API Access** |
+    | Environment |  |
+    | Access | **Private** |
+
+4. Leave the **Automatically approve access requests** checkbox selected.
+
+5. In the **Operations** section, click **+Add an Operation**.
+
+    <ql-infobox>
+    Operations are used to specify which requests in which API proxies are allowed for an application associated with the API product. 
+    </ql-infobox>
+
+6. In the **Operation** dialog, specify the following.
+
+    | Property | Value |
+    | --- | --- |
+    | Source | **API Proxy > SMN-Labs** |
+    | Operation | Path  __/**__ |
+    | Methods | **GET, PATCH, POST, PUT and DELETE** |
+
+7. To save the operation, click **Save**.
+
+8. To save the API product, click **Save** at the top of the page.
+
+9. To verify that your API product has been added, return to the API Products page and check that it is listed.
+
+
+## Task 3: Create a developer
+
+Developers are typically created using a developer portal. Developers create Apps that use API Products.
+
+1. In the left navigation menu, select **Publish > Developers**.
+
+2. To create a new Developer, click **+Developer**.
+
+3. In the **Create a developer** page, specify the following.
+
+    | Property | Value |
+    | --- | --- |
+    | First Name | **Anastasia** |
+    | Last Name | **Bischof** |
+    | Username | **ab1d** |
+    | Email | **abischof1d@google.com** |
+
+4. To create the app developer, click **Create**.
+
+
+## Task 4: Create an app
+
+In this task, you create an app for your app developer. The app represents the application that consumes the API Product/API Proxy.
+
+1. In the left navigation menu, select **Publish > Apps**.
+
+2. To create a new app, click **+App**. You may need to refresh the browser window for this button to be active.
+
+3. In the **New app** page **App details** panel, specify the following.
+
+    | Property | Value |
+    | --- | --- |
+    | Name | **show-me-now-web** |
+    | Display Name | **Show Me Now - Web Client** |
+    | Developer | **abischof1d@google.com** |
+
+4. In the **Credentials** panel, click **Add Product**, select **Show Me Now**, and then click **ADD(1)**.
+
+5. To create the app, click **Create** at the top of the page.
+
+6. In the Credentials panel, click **Show** next to **Key** and copy the value. Save the key as you need it for the next task.
+
+
+## Task 6: Testing the key
+
+1.  In the left navigation menu, select **Admin > Environments > Groups** and copy the hostname from __eval-group__. Save the hostname so that it is available for the following steps.
+
+    ![hostname](images/hostname.png)
+
+2. Return to the browser tab which has Cloud console open. If none are available, open a new tab and navigate to https://console.cloud.google.com.
+
+3. In the top menu, click **Activate Cloud Shell** (![Activate Cloud Shell icon](images/activate_shell.png)) to open Cloud Shell.
+
+4. To test your Key, execute the following command replacing **APIGEE_URL** with the Apigee Hostname and **KEY_HERE** with the key you copied earlier from your API Product. 
+
+    **Note**: The API Key must be placed *before* the closing ”.
+
+    ```bash
+    curl -k APIGEE_URL/show-me-now/v0/customers \
+    -H "apikey:KEY_HERE"
+    ```
+
+    **Example:**
+
+    ```bash
+    curl -k https://api.roiapigee.net/show-me-now/v0/customers \
+    -H "apikey:giJbIK8n6Udq6TVcrpf4lImldRM0Far4CSAUAGYtsXD60rvv"
+    ```
+
+    <ql-infobox>
+    You should see all customers in JSON format.
+    </ql-infobox>
+
+
+### **Congratulations!** You implemented an API key. The API proxy is now secure from unauthorized access but remains vulnerable to data leakage and injection attacks.
+
 
 ![[/fragments/copyright]]
+

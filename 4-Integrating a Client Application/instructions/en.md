@@ -461,20 +461,18 @@ All requests sent to the API by users who have logged in using federated authent
 
     ![add policy to conditional flow](images/addcustomer.png)
  
-6. In the dialogs, click the **Select existing policy** dropdown, select **Create new policy**, and select the **Verify JWT** policy from the **Security** group. 
+6. In the dialog, select **Create new policy**, and select the **Verify JWT** policy from the **Security** group. 
 
-7. Set the following properties and click **Create**. 
+7. Set the following properties and click **Add**. 
 
     | Property | Value |
     | --- | --- |
     | Name | **VJWT-Firebase** |
     | Display name | **VJWT-Firebase** |
 
-8. In the dropdown, select **VJWT-Firebase** and click **Add**.
+8. In the development panel, locate the policy inside the **Customers** conditional flow and click the **VJWT-Firebase** link.
 
-9. In the development panel, locate the policy inside the **Customers** conditional flow and click the **VJWT-Firebase** link.
-
-10. Delete all the existing XML for the **VJWT-Firebase** policy and replace it with the following.
+9. Delete all the existing XML for the **VJWT-Firebase** policy and replace it with the following.
 
     ```xml
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -491,7 +489,7 @@ All requests sent to the API by users who have logged in using federated authent
     This verifies the JWT found in the default location (request.header.authorization).
     </ql-infobox>
 
-11. In the development panel, click the policy step actions icon (![actions icon](images/actions.png)) for the **Proxy Endpoint default > Request > Customers** conditional flow. Click **Move up** to position the **VJWT-Firebase** policy as the first policy in the flow.
+10. In the development panel, click the policy step actions icon (![actions icon](images/actions.png)) for the **Proxy Endpoint default > Request > Customers** conditional flow. Click **Move up** to position the **VJWT-Firebase** policy as the first policy in the flow.
 
     ![move policy to top](images/top.png)
  
@@ -503,14 +501,14 @@ All requests sent to the API by users who have logged in using federated authent
     Three further policies are required to ensure an individual can only modify their own details: an Assign Message policy, a Raise Fault policy, and a policy that extracts the email address from the JSON body of the request rather than a parameter.
     </ql-infobox>
 
-12. Add an **Assign Message** policy to the Customer Preflow as follows.
+11. Add an **Assign Message** policy to the Customer Preflow as follows.
 
     | Property | Value |
     | --- | --- |
     | Name | **AM-Admin-User** |
     | Display name | **AM-Admin-User** |
 
-13. Delete all the existing XML for the **AM-Admin-User** policy and replace it with the following.
+12. Delete all the existing XML for the **AM-Admin-User** policy and replace it with the following.
 
     ```xml
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -528,16 +526,16 @@ All requests sent to the API by users who have logged in using federated authent
     This policy sets the admin variable to true when the condition matches. Note: the condition has not yet been implemented.
     </ql-infobox>
 
-14. In the development panel, move the position the **AM-Admin-User** policy before the existing **EV-Get-Email** policy.
+13. In the development panel, move the position the **AM-Admin-User** policy before the existing **EV-Get-Email** policy.
 
-15. Add a **Raise Fault** policy to the Customer Preflow as follows.
+14. Add a **Raise Fault** policy to the Customer Preflow as follows.
 
     | Property | Value |
     | --- | --- |
     | Name | **RF-JWT-Email-Error** |
     | Display name | **RF-JWT-Email-Error** |
 
-16. Delete all the existing XML for the **RF-JWT-Email-Error** policy and replace it with the following.
+15. Delete all the existing XML for the **RF-JWT-Email-Error** policy and replace it with the following.
 
     ```xml
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -560,11 +558,11 @@ All requests sent to the API by users who have logged in using federated authent
     This policy will raise a fault if the user attempts to access an account that is not their own.
     </ql-infobox>
 
-17. In the development navigator panel, click **Proxy endpoints > default** to reopen the Proxy endpoint in the development panel.
+16. In the development navigator panel, click **Proxy endpoints > default** to reopen the Proxy endpoint in the development panel.
 
-18. In the XML, locate the ```<Flow name="Customers">``` element and the **AM-Admin-User** ```Step```.
+17. In the XML, locate the ```<Flow name="Customers">``` element and the **AM-Admin-User** ```Step```.
 
-19. Add a new Condition element between the closing ```</Name>``` and ```</Step>``` tags as follows.
+18. Add a new Condition element between the closing ```</Name>``` and ```</Step>``` tags as follows.
 
     ```xml
     <Condition>jwt.VJWT-Firebase.decoded.claim.email == "REPLACE-ME"</Condition>
@@ -581,7 +579,7 @@ All requests sent to the API by users who have logged in using federated authent
     </Step>
     ```
 
-20. To allow only the Qwiklabs student identity to modify an email address other than their own, modify the Condition by replacing **REPLACE-ME** with the email address of the student identity.
+19. To allow only the Qwiklabs student identity to modify an email address other than their own, modify the Condition by replacing **REPLACE-ME** with the email address of the student identity.
 
     <ql-infobox>
     The email address is available to the left of these instructions. 
@@ -600,7 +598,7 @@ All requests sent to the API by users who have logged in using federated authent
     This sets the variable <strong>admin</strong> to true if the email address found in the JWT is equal to your student email address. This should be checked in the Raise Fault step.
     </ql-infobox>
 
-21. Also in the ```<Flow name="Customers">``` element in the XML, locate the **RF-JWT-Email-Error** ```Step``` and add the following condition to raise the error if the user requests a customer email other than their own, and the **admin** variable is not set to **true**.
+20. Also in the ```<Flow name="Customers">``` element in the XML, locate the **RF-JWT-Email-Error** ```Step``` and add the following condition to raise the error if the user requests a customer email other than their own, and the **admin** variable is not set to **true**.
 
     ```xml
     <Condition>jwt.VerifyJWT-1.decoded.claim.email != queryinfo.email and admin != true</Condition>
@@ -617,7 +615,7 @@ All requests sent to the API by users who have logged in using federated authent
     </Step>
     ```
 
-22. To ensure the **EV-Get-Email** policy only runs if the user is not an administrator, locate the **EV-Get-Email** ```Step``` in the **Customer** flow and replace the existing condition with the following.
+21. To ensure the **EV-Get-Email** policy only runs if the user is not an administrator, locate the **EV-Get-Email** ```Step``` in the **Customer** flow and replace the existing condition with the following.
 
     ```xml
      <Condition>(request.verb = "GET" and admin != true)</Condition>
@@ -627,16 +625,16 @@ All requests sent to the API by users who have logged in using federated authent
     This ensures the Administrator can still see every customer's data. 
     </ql-infobox>
 
-23. To retrieve a customer email address in the edit path, add an additional **Extract Variables** policy with the following properties. 
+22. To retrieve a customer email address in the edit path, add an additional **Extract Variables** policy with the following properties. 
 
     | Property | Value |
     | --- | --- |
     | Name | **EV-Get-Email-Body** |
     | Display name | **EV-Get-Email-Body** |
 
-24. In the development panel, locate the policy inside the **Customers** conditional flow and move it immediately after **EV-Get-Email**. 
+23. In the development panel, locate the policy inside the **Customers** conditional flow and move it immediately after **EV-Get-Email**. 
 
-25. Click the **EV-Get-Email** link to select it, delete all the existing XML for the **EV-Get-Email** policy and replace it with the following.
+24. Click the **EV-Get-Email** link to select it, delete all the existing XML for the **EV-Get-Email** policy and replace it with the following.
 
     ```xml
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -658,27 +656,27 @@ All requests sent to the API by users who have logged in using federated authent
     This policy captures the <strong>email</strong> from the JSON body and stores it as a variable for use in the validation process.
     </ql-infobox>
 
-26. To ensure the **EV-Get-Email-Body** policy only runs if the user is not an administrator, locate the **EV-Get-Email** ```Step``` in the **Customer** flow and add the following condition.
+25. To ensure the **EV-Get-Email-Body** policy only runs if the user is not an administrator, locate the **EV-Get-Email** ```Step``` in the **Customer** flow and add the following condition.
 
     ```xml
      <Condition>(request.verb = "PUT" and admin != true)</Condition>
     ```
 
- 27. To ensure the email variable is evaluated on a **PUT** as well as a **GET** request, but only if the user is not an admin, locate the **EV-DLP** ```Step``` in the **Customer** flow and replace the existing condition with the following.
+ 26. To ensure the email variable is evaluated on a **PUT** as well as a **GET** request, but only if the user is not an admin, locate the **EV-DLP** ```Step``` in the **Customer** flow and replace the existing condition with the following.
 
     ```xml
      <Condition>(admin != true and request.verb = "GET" OR request.verb = "PUT")</Condition>
     ```
 
-28. Click **Save** and **Save as New Revision**
+27. Click **Save** and **Save as New Revision**
 
-29. Click **Deploy** and add in the dialog, the Service Account identifier that you saved in an earlier lab.
+28. Click **Deploy** and add in the dialog, the Service Account identifier that you saved in an earlier lab.
 
     <ql-infobox>
     If you have mislaid your service account identifier, the steps to discover it are available above.
     </ql-infobox>
 
-30. Click __Deploy__ and then __Confirm__ and wait until the revision has finished deploying.
+29. Click __Deploy__ and then __Confirm__ and wait until the revision has finished deploying.
 
 
 ## Task 10. Test user verification
