@@ -46,6 +46,10 @@ In this part of the lab, you learn how to:
     Provisioning can take up to 1 hour. Leave the browser tab open and proceed to the next task.
     </ql-infobox> 
 
+## Wait for your instructor before continuing to Part 2. 
+
+ ![Stop sign](images/stop.png "stop sign")
+
 
 ## Part 2 - Explore the Legacy API
 
@@ -1049,12 +1053,6 @@ The Suppliers and Shipments paths are both unsecured. In the bonus, you create n
     <ql-infobox>
     Both commands should successfully return data.
     </ql-infobox>
-
-## Wait for your instructor before continuing to Part 3. 
-
-
- ![Stop sign](images/stop.png "stop sign")
-
 
 ## Part 4 - Securing the API with an API Key
 
