@@ -23,6 +23,38 @@ In this lab, you learn how to:
 
 ![[/fragments/apigeex-console]]
 
+## Task 0. Provison LAB resources 
+
+1. Navigate to the the Google Cloud console at **https://console.cloud.google**.
+
+2. Click Activate Cloud Shell (Activate Cloud Shell icon) in the top menu to open Cloud Shell
+
+3.  To ensure that you are in the Cloud Shell home directory, execute the following command.
+
+    ```bash
+    cd ~ 
+    ```
+
+4. Clone the class repository and move into the repository root folder.
+
+    ```bash
+    git clone https://github.com/fabltd/Apigee-utils
+    cd Apigee-utils
+    ```
+
+    <ql-infobox>
+    The following step runs a script that provisons the VS Code server enviroment
+    </ql-infobox>
+
+5. Create a VM and install VS Code Server.
+
+   ```bash
+    ./setup/install/lab7/install.sh
+    ```
+
+6. Wait for the script to complete and you should see - Done !!!!
+
+
 ## Task 1. Set up your environment
 
 1. In the Google Cloud console, from the Navigation menu (![Navigation menu icon](https://storage.googleapis.com/cloud-training/images/menu.png)), select __Compute Engine and VM instances__.
