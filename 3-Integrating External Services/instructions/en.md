@@ -206,7 +206,7 @@ Apigee requires a Service Account with the correct permissions to be able to cal
 
 4. In the top menu, click **Develop**.
 
-5. To edit the metadata to reflect Lab 5, click the pencil icon beside **Details**.
+5. To edit the metadata to reflect Lab 3, click the pencil icon beside **Details**.
 
     ![edit metadata](images/metadata2.png)
 
@@ -214,8 +214,8 @@ Apigee requires a Service Account with the correct permissions to be able to cal
 
     | Property | Value |
     | --- | --- |
-    | Display name | **SMN-Lab5** |
-    | Description | **Show Me Now - LAB 5** |
+    | Display name | **SMN-Lab3** |
+    | Description | **Show Me Now - LAB 3** |
 
 7. In the Navigator, select **Customers** in the **Proxy endpoints default**. 
 
@@ -453,7 +453,7 @@ In order to test the service callout, you need two values: the URL of your proxy
 
 If you don't have a convenient notepad application to save these values, you can open another Chrome tab and use https://www.rapidtables.com/tools/notepad.html. 
 
-1.  In the left navigation menu, select **Admin > Environments > Groups** and copy the hostname that includes an IP Address from __eval-group__. Save the hostname locally.
+1.  In the left navigation menu, select **Admin > Environments > Groups** and copy the hostname that includes an IP Address from __test-env-group__. Save the hostname locally.
 
     ![hostname](images/hostname.png)
 

@@ -191,7 +191,7 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
 
 5. On the details page, locate the **Credentials** section and click **Show** beside **Key**. Select and copy the API key. Save the API key locally as you will need it soon.
 
-6. In the left navigation menu, select **Admin > Environments > Groups** and copy the hostname from __eval-group__. Save the hostname so that it is available for the following steps.
+6. In the left navigation menu, select **Admin > Environments > Groups** and copy the hostname from __test-env-group__. Save the hostname so that it is available for the following steps.
 
     ![hostname](images/hostname.png)
 

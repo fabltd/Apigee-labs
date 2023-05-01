@@ -123,7 +123,7 @@ The steps in the bonus task are not required for this lab. If you do not wish to
 2. Create an API key by creating an **API Product**, a **Developer** and an **App**, and then using **show** to obtain the API key.
 
     <ql-infobox>
-    Detailed instructions for creating an API key are available in Lab 3.
+    Detailed instructions for creating an API key are available in Lab 1.
     </ql-infobox>
 
 3. To use the API key from the hacker page, paste it into the API Key textbox and ensure it is present when calling any methods on the API.
