@@ -385,7 +385,7 @@ The script checks to see you removed the public IP Address and if not will do th
 6. When the prompt changes indicating you are connected to the gateway, execute the following command.
 
     ```bash
-    cat /etc/Nginx/sites-enabled/reverse-proxy.conf 
+    cat /etc/nginx/sites-enabled/reverse-proxy.conf 
     ```
 
 7. Confirm that the output is similar to this.
@@ -1014,7 +1014,7 @@ The Suppliers and Shipments paths are both unsecured. In the bonus, you create n
     <AssignMessage continueOnError="false" enabled="true" name="AM-Set-Suppliers">
         <DisplayName>AM-Set-Suppliers</DisplayName>
         <AssignVariable>
-            <Name>dyanmic_path</Name>
+            <Name>dynamic_path</Name>
             <Value>/suppliers</Value>
         </AssignVariable>
         <AssignTo createNew="false" transport="http" type="request"/>
@@ -1030,7 +1030,7 @@ The Suppliers and Shipments paths are both unsecured. In the bonus, you create n
     <AssignMessage continueOnError="false" enabled="true" name="AM-Set-Shipments">
         <DisplayName>AM-Set-Shipments</DisplayName>
         <AssignVariable>
-            <Name>dyanmic_path</Name>
+             <Name>dynamic_path</Name>
             <Value>/shipments</Value>
         </AssignVariable>
         <AssignTo createNew="false" transport="http" type="request"/>

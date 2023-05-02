@@ -204,7 +204,7 @@ There are many different tools available for the development of OpenAPI Specific
 
 4. In the dialog, click the **Select existing policy** dropdown and select **Create new policy**. 
 
-   In the next dialog, select the **VRaise Fault** policy from the **Mediation** group. 
+   In the next dialog, select the **Raise Fault** policy from the **Mediation** group. 
 
 5. Set the following properties and click **Create**. 
 
@@ -319,7 +319,7 @@ There are many different tools available for the development of OpenAPI Specific
 
 16. In the dropdown, select **AM-SetCORSHeader** and click **Add**.
 
-17. In the development panel, locate the policy inside the preflow and click the **AM-remove-suffix** link.
+17. In the development panel, locate the policy inside the preflow and click the **AM-SetCORSHeader** link.
 
 18. Replace all the XML with the following.
 
