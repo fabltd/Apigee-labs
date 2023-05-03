@@ -433,9 +433,10 @@ A Basic mode rule can only specify IP addresses or IP address ranges to match. I
 
 10.  Next to **protect-apis**, click the policy menu button ((![actions](images/actions.png))), and then click **Apply policy to target**.
 
-    (![Apply policy](images/policyactions.png))
+![Apply policy](images/policyactions.png)
 
-10. For the **Backend Service target 1** dropdown, select **apigee-proxy-backend** and click **Add**.
+
+11. For the **Backend Service target 1** dropdown, select **apigee-proxy-backend** and click **Add**.
 
     <ql-infobox>
     The <strong>protect-apis</strong> policy details page should soon show that the policy applies to 1 target.

@@ -218,7 +218,7 @@ The Apigee Policies required to handle interaction with reCAPTCHA Enterprise hav
 
 
     ```bash
-    ./apigee-add-reCAPTCHA.sh
+    ./apigee-add-reCaptcha.sh
     ```
 
     **EXAMPLE OUTPUT**
@@ -325,7 +325,7 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
     | --- | --- |
     | Name | **FC-reCAPTCHA** |
     | Display name | **FC-reCAPTCHA** |
-    | SharedFlow | **reCATPCHAv1** |
+    | SharedFlow | **reCaptureV1** |
 
 6. In the development view navigator panel, click **Proxy endpoints - default** to open the proxy endpoint in the development panel.
 

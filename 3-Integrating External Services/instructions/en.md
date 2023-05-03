@@ -429,7 +429,7 @@ Apigee requires a Service Account with the correct permissions to be able to cal
     ```xml
     <Step>
         <Name>EV-DLP</Name>
-        <Condition>(request.verb = "GET")</Condition>
+        <Condition>(request.verb = "GET" or request.verb = "PUT")</Condition>
     </Step>
     ```
 
@@ -589,7 +589,7 @@ The proxy should raise an error if a false email address is provided, and otherw
     ```xml
     <Step>
         <Name>RF-Not-Email</Name>
-        <Condition>dlp.name0 != "EMAIL_ADDRESS" and dlp.name1 != "EMAIL_ADDRESS"</Condition>
+        <Condition>dlp.name0 != null and dlp.name0 != "EMAIL_ADDRESS" and dlp.name1 != "EMAIL_ADDRESS"</Condition>
     </Step>
     ```
 
@@ -613,7 +613,7 @@ Debugging is useful during development, but does not meet the needs of productio
     | Name | **ML-GCP-Logging** |
     | Display name | **ML-GCP-Logging** |
 
-4. In the Proxy endpoints > default development panel, click the policy step actions icon (![actions icon](images/actions.png)) beside **ML-GCP-Logging** in the Preflow and click **Move up** to position the policy before **RF-Not-Email**
+4. In the Proxy endpoints > default development panel, click the policy step actions icon (![actions icon](images/actions.png)) beside **ML-GCP-Logging** in the Customers Flow and click **Move up** to position the policy before **RF-Not-Email**
 
     <ql-infobox>
     The ML-GCP-Logging policy runs before the RF-Not-Email policy.
@@ -774,9 +774,9 @@ The team at MHC is very busy with operational tasks and would like to eliminate 
     Note that the content matches the current content of the query editor.
     </ql-infobox>
 
-9. At **Set notification frequency and auto close duration**, set the **Time between notifications** to **5 min** and click **Next**.
+9. At **Set notification frequency and auto close duration**, set the **Time between notifications** to **5 min**.
 
-10. At **Set notification frequency and auto close duration**, set the **Time between notifications** to **5 min** and click **Next**.
+10. At **Set notification frequency and auto close duration**, set the **Incident autoclose duration** to **30 min** and click **Next**.
 
 11. At **Who should be notified?**, click the **Notification Channels** box and select **Manage Notifications**.
 
