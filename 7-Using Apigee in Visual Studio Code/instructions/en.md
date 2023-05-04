@@ -419,25 +419,25 @@ Example URL:
 
 14.  Locate the **APIGEE_URL** value you noted above. Execute the following command, replacing **APIGEE_URL** with your value. 
 
-    ```
-    curl https://APIGEE_URL/v1/demo ; echo
-    ```
+```
+curl https://APIGEE_URL/v1/demo ; echo
+```
 
-    <ql-infobox>
-    Note: <strong>; echo</strong> ensures the result is on a newline in the terminal.
-    </ql-infobox>
+<ql-infobox>
+Note: <strong>; echo</strong> ensures the result is on a newline in the terminal.
+</ql-infobox>
 
-    **Example command**
+**Example command**
 
-    ```
-    curl https://34.149.141.95.nip.io/v1/demo; echo
-    ```
+```
+curl https://34.149.141.95.nip.io/v1/demo; echo
+```
 
-    **Expected output**
+**Expected output**
 
-    ```
-    Hello, Guest!
-    ```
+```
+Hello, Guest!
+```
 
 
 ### **Congratulations!** You have deployed a local Cloud Code for a VS Code development environment, tested your proxy and deployed to Apigee. This workflow allows for proxies to be integrated with CI/CD workflows as the code can and should be checked into a Git repository.
