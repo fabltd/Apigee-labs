@@ -77,7 +77,7 @@ In this lab, you learn how to:
     | Property | Value |
     | --- | --- |
     | Display name | **SMN-Lab2** |
-    | Description | **sShow Me Now - LAB 2** |
+    | Description | **Show Me Now - LAB 2** |
 
 7.  In the left navigation menu, select **Admin > Environments > Groups** and then copy and make a note of the hostname from __test-env group__. 
 
