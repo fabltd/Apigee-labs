@@ -28,7 +28,7 @@ In this part of the lab, you learn how to:
 
 ## Task 1. Install Apigee X
 
-1. After logging into the Google Cloud Console, in the left navigation menu, select **Integration Services > Apigee API Management**. 
+1. After logging into the Google Cloud Console, in the left navigation menu, select **Integration Services > Apigee > API Proxies**. 
 
     ![screenshot of Apigee](images/apigee.png "screenshot")
 
@@ -366,10 +366,10 @@ The script checks to see you removed the public IP Address and if not will do th
 
 3. Return to the Cloud console and if necessary click **Activate Cloud Shell** (![Activate Cloud Shell icon](images/activate_shell.png)) in the top menu to open Cloud Shell.
 
-4. In Cloud Shell, set the default compute zone to the zone used by the gateway vm, replacing [us-central1-a] in the following code with your zone.
+4. In Cloud Shell, set the default compute zone to the zone used by the gateway vm, by default this is ***us-central1-a***. You may need to change it. Replace ***us-cental1-a** if your VM is in a different zone.
 
     ```bash
-    gcloud config set compute/zone [us-central1-a]
+    gcloud config set compute/zone us-central1-a
     ```
 
     <ql-infobox>
