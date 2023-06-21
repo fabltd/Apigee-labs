@@ -20,6 +20,37 @@ In this lab, you learn how to:
 
 ![[/fragments/apigeex-console]]
 
+## Task 0. Provison LAB resources 
+
+1. Navigate to the the Google Cloud console at **https://console.cloud.google**.
+
+2. Click Activate Cloud Shell (Activate Cloud Shell icon) in the top menu to open Cloud Shell
+
+3.  To ensure that you are in the Cloud Shell home directory, execute the following command.
+
+    ```bash
+    cd ~ 
+    ```
+
+4. Clone the class repository and move into the repository root folder.
+
+    ```bash
+    git clone https://github.com/fabltd/Apigee-utils
+    cd Apigee-utils
+    ```
+
+    <ql-infobox>
+    The following step runs a script that provisons all the resources you setup in LAB 1
+    </ql-infobox>
+
+5. Create and configure the gateway / legacy VMs and base API proxy using the following bash script.
+
+   ```bash
+    ./setup/install/lab6/install.sh
+    ```
+
+6. Wait for the script to complete and you should see Done - Return to Apigee.
+
 ## Task 1. Provision the hacker page
 
 This lab uses the hacker page you were introduced to in an earlier lab. As a reminder, the security team at MHC have developed a simple HTML page that allows for manipulation of API endpoints.

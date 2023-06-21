@@ -52,7 +52,7 @@ In this lab, you learn how to:
 5. Create and configure the gateway / legacy VMs and base API proxy using the following bash script.
 
    ```bash
-    ./setup/install/lab2+/install.sh
+    ./setup/install/lab2/install.sh
     ```
 
 6. Wait for the script to complete and you should see Done - Return to Apigee.
