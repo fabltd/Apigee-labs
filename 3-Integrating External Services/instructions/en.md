@@ -44,7 +44,7 @@ In this lab, you learn how to:
     ```
 
     <ql-infobox>
-    The following step runs a script that provisons all the resources you setup in LAB 1
+     The following step runs a script that provisons all the resources you will need
     </ql-infobox>
 
 5. Create and configure the gateway / legacy VMs and base API proxy using the following bash script.

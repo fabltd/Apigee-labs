@@ -43,7 +43,7 @@ In this lab, you learn how to:
     ```
 
     <ql-infobox>
-    The following step runs a script that provisons all the resources you setup in LAB 1
+     The following step runs a script that provisons all the resources you will need
     </ql-infobox>
 
 5. Create and configure the gateway / legacy VMs and base API proxy using the following bash script.
@@ -70,7 +70,7 @@ In this task, you clone the source code for the **Show Me Now** Angular applicat
 3. To clone the repository for the **Show Me Now** web application, execute the following command.
 
     ```
-    git clone https://github.com/KevinRattan/show-me-now.git
+    git clone https://github.com/fabltd/apigee-show-me-now
     ```
 
 4. Navigate to the directory that contains your working files.
@@ -148,25 +148,29 @@ In this task, you use Firebase, Google’s mobile application development platfo
 
 4. Select your Qwiklabs student email as the **Project support email** and then click **Save**.
 
-5. Click **Project Overview** in the upper-left corner of the Firebase console.
+5. Click **Settings** and **Authroised domains** 
 
-6. Locate the **Getting started** section and click the web icon ```</>```.
+6. Click **Add domain** and insert **run.app** and click **Add**
+
+7. Click **Project Overview** in the upper-left corner of the Firebase console.
+
+8. Locate the **Getting started** section and click the web icon ```</>```.
 
     ![Web Icon](images/addapp.png)
 
-8. In the **Register your app** wizard step, give your app the nickname **Show Me Now**, then click **Register app**.
+9. In the **Register your app** wizard step, give your app the nickname **Show Me Now**, then click **Register app**.
 
-9. In **Add Firebase SDK** (Step 2), locate the variable named **firebaseConfig**.
+10. In **Add Firebase SDK** (Step 2), locate the variable named **firebaseConfig**.
 
-10. Select and copy the content of the **firebaseConfig** object.
+11. Select and copy the content of the **firebaseConfig** object.
 
 ![firebase config](images/config.png)
 
-11. Click **Continue to console**.
+12. Click **Continue to console**.
 
-12. Return to Cloud Shell Editor in your original browser tab and refresh the browser to ensure you are connected.
+13. Return to Cloud Shell Editor in your original browser tab and refresh the browser to ensure you are connected.
 
-13. Use Explorer to locate the file **show-me-now/src/environments/environment.ts** and click the file to open it in the editor. You should see the following content.
+14. Use Explorer to locate the file **show-me-now/src/environments/environment.ts** and click the file to open it in the editor. You should see the following content.
 
     ```javascript
     export const environment = {
@@ -185,7 +189,7 @@ In this task, you use Firebase, Google’s mobile application development platfo
     };
     ```
 
-14. Replace the entire contents of the **firebaseConfig** object with the section copied from the Firebase console.
+15. Replace the entire contents of the **firebaseConfig** object with the section copied from the Firebase console.
 
     **EXAMPLE**
 
@@ -342,7 +346,7 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
 2. In the **Track My Package** box, enter the following tracking number.
 
     ```
-    01dhQEqMQSzAx0HTLEmA
+    2nUz1hUbaQdfoS4Sktm9
     ```
 
 3. Note that there is no response. Use the Chrome developer tools to examine the error message.
@@ -366,7 +370,7 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
 
 3. From the proxy list, select **SMN-Labs**. To switch to the development view, click **Develop**.
 
-4. In the development navigation panel, click the proxy name **SMN-LAB5**.
+4. In the development navigation panel, click the proxy name **SMN-LABs**.
 
     ![navigation panel](images/metadata1.png)
 
@@ -378,8 +382,8 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
 
     | Property | Value |
     | --- | --- |
-    | Display name | **SMN-Lab6** |
-    | Description | **Show Me Now - LAB 6** |
+    | Display name | **SMN-Lab4** |
+    | Description | **Show Me Now - LAB 4** |
 
 
 7. In the Policies list, locate **RF-PreflightCORS** and replace the line with the tag ```<Access-Control-Allow-Headers>``` with the following.
@@ -399,7 +403,7 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
 10. In the Deploy dialog, add the Service Account identifier that you saved in an earlier lab.
 
     <ql-infobox>
-    If you have mislaid your service account identifier, you can recover it with the following command.
+    In the cloud shell, run the following command to get your service account.
     </ql-infobox>
 
     ```bash
@@ -408,7 +412,7 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
 
 11. Click **overview** and verify that the proxy has been deployed successfully.
 
-12. Return to Show Me Now and check the tracking number ```01dhQEqMQSzAx0HTLEmA``` is still present. Click ***Get Progress*** and you should see the following.
+12. Return to Show Me Now and check the tracking number ```2nUz1hUbaQdfoS4Sktm9``` is still present. Click ***Get Progress*** and you should see the following.
 
   ![tracking result](images/track.png)
 
@@ -632,7 +636,7 @@ All requests sent to the API by users who have logged in using federated authent
 20. Also in the ```<Flow name="Customers">``` element in the XML, locate the **RF-JWT-Email-Error** ```Step``` and add the following condition to raise the error if the user requests a customer email other than their own, and the **admin** variable is not set to **true**.
 
     ```xml
-    <Condition>jwt.VerifyJWT-1.decoded.claim.email != queryinfo.email and admin != true</Condition>
+    <Condition>jwt.VJWT-Firebase.claim.email != queryinfo.email and admin != true</Condition>
     ```
 
     <ql-infobox>
@@ -695,9 +699,10 @@ All requests sent to the API by users who have logged in using federated authent
 
  26. To ensure the email variable is evaluated on a **PUT** as well as a **GET** request, but only if the user is not an admin, locate the **EV-DLP** ```Step``` in the **Customer** flow and replace the existing condition with the following.
 
-    ```xml
+     ```xml
      <Condition>(admin != true and request.verb = "GET" OR request.verb = "PUT")</Condition>
-    ```
+     ```
+
 
 27. Click **Save** and **Save as New Revision**
 

@@ -40,7 +40,7 @@ In this lab, you learn how to:
     ```
 
     <ql-infobox>
-    The following step runs a script that provisons all the resources you setup in LAB 1
+     The following step runs a script that provisons all the resources you will need
     </ql-infobox>
 
 5. Create and configure the gateway / legacy VMs and base API proxy using the following bash script.
@@ -297,7 +297,7 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
 
 3. In the left navigation menu, select **Develop > API Proxies**.
 
-4. From the proxy list, select **SMN-Labs8**. To switch to the development view, click **Develop**.
+4. From the proxy list, select **SMN-Labs**. To switch to the development view, click **Develop**.
 
 5. In the development navigation panel, click **Proxy endpoints > default > Preflow** to open the Proxy endoint in the development pane with the Preflow selected.
 
@@ -342,7 +342,7 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
 
 1. In the left navigation menu, select **Develop > API Proxies**.
 
-2. From the proxy list, select **SMN-Labs8**. To switch to the development view, click **Develop**.
+2. From the proxy list, select **SMN-Labs**. To switch to the development view, click **Develop**.
 
 3. Click the Add Policy icon (![icon](images/plus.png)) next to **Policies**.
 

@@ -281,7 +281,7 @@ Apigee provides a policy that can validate the payload provided in Task 2 and ra
 
 3. In the left navigation menu, select **Develop > API Proxies**.
 
-4. From the proxy list, select **SMN-Labs7**. To switch to the development view, click **Develop**.
+4. From the proxy list, select **SMN-Labs**. To switch to the development view, click **Develop**.
 
 5. In the development navigation panel, click **Proxy endpoints > default > Suppliers** to open the development pane for the flow with the Suppliers highlighted.
 
