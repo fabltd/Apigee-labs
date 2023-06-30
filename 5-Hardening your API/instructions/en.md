@@ -72,7 +72,6 @@ The start point for this lab is a simplified version of your existing project to
 3. To clone the class repository and move into the repository hacker folder, execute the following command.
 
     ```bash
-    git clone https://github.com/fabltd/Apigee-utils
     cd Apigee-utils/hacker
     ```
 
@@ -285,7 +284,7 @@ Apigee provides a policy that can validate the payload provided in Task 2 and ra
 
 5. In the development navigation panel, click **Proxy endpoints > default > Suppliers** to open the development pane for the flow with the Suppliers highlighted.
 
-6. In the development panel, click the + icon (![icon](images/plus.png)) for the **Proxy Endpoint default > Request > Suppliers** conditional flow.
+6. In the development panel, click the (+) icon  for the **Proxy Endpoint default > Request > Suppliers** conditional flow. ![icon](images/suppliers-add.png)
  
 7. In the dialogs, select **Create new policy**, and select the **JSON Threat Protection** policy from the Security group.
 
@@ -452,7 +451,7 @@ In this task, you add a Google Cloud Armor security policy to protect your load 
 
 A Basic mode rule can only specify IP addresses or IP address ranges to match. In this case, you used Advance Mode to add the IP address. You could further expand the rule as detailed here in the [Google Cloud Armor documentation](https://cloud.google.com/armor/docs/configure-security-policies#creating-policy-rules).
 
-    <ql-infobox>
+<ql-infobox>
     Your rule restricts API traffic to the gateway VM. You could use a rule like this to restrict traffic to your development environment. 
     </ql-infobox>
 
