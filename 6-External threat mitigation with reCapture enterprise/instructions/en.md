@@ -68,7 +68,6 @@ In this task, you provision the hacker page and confirm Apigee is operational.
 3. To clone the class repository and move into the repository hacker folder, execute the following command.
 
     ```bash
-    git clone https://github.com/fabltd/Apigee-utils
     cd Apigee-utils/hacker
     ```
 
@@ -159,7 +158,7 @@ In this task, you provision the hacker page and confirm Apigee is operational.
     ```
 
     <ql-infobox>
-    The **run.app** domain is the default for all containers hosted in Cloud Run.
+    The run.app domain is the default for all containers hosted in Cloud Run.
     </ql-infobox>
 
 7. Click **Done** and then expand the **Web Application Firewall (WAF), domain verification, AMP pages, and challenge** option.
@@ -205,32 +204,19 @@ In this task, you provision the hacker page and confirm Apigee is operational.
 
 ## Task 3. Provision reCAPTCHA permissions
 
-Apigee requires a Service Account with the correct permissions to be able to call the reCaptcha Enterprise validation API.
+Apigee requires that the Service Account has correct permissions to be able to call the reCaptcha Enterprise validation API.
 
-1. In the Google Cloud console, from the Navigation menu (![Navigation menu icon](https://storage.googleapis.com/cloud-training/images/menu.png)), select __IAM & Admin > Service Accounts__.
+1. In the Google Cloud console, from the Navigation menu (![Navigation menu icon](https://storage.googleapis.com/cloud-training/images/menu.png)), select __IAM & Admin > IAM__.
 
-2. In the top menu, click **+ Create Service Account**.
+2. locate the service account **sa-apigee-google-services@YOURPROJECTID*.
 
-3. In first step of the wizard, set the following. 
+3. Click the **pencil button**. 
 
-    | Property | Value |
-    | --- | --- |
-    | Service account name | **sa-apigee-google-services** |
-    | Service account description | **Service account for Apigee to access Google services** |
+4. Click **+ Add Another Role**
 
-    <ql-infobox>
-    The Service Account ID is populated automatically when you add the name.
-    </ql-infobox> 
+5. For **Select a Role**, enter **reCAPTCHA Enterprise Agent** into the filter.
 
-4. To copy the email address identifier for the new Service Account, click the copy icon (![copy](images/copyicon.png)) to save the value to your clipboard. Make a note of this value as you need it in a later step.
-
-    ![service dialog](images/service.png)
-
-5. Click **Create and Continue**.
-
-6. For **Select a Role**, enter **reCAPTCHA Enterprise Agent** into the filter.
-
-7. Click **Continue** and **Done**.
+6. Click **SAVE**
 
 
 ## Task 3. Install the shared flow
@@ -333,9 +319,19 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
 
 10. Click **Develop** to see the flow, and then click **Deploy**.
 
-11. In the **Deploy reCATPCHAv1** dialog, add the Service Account email identifier your saved in an earlier step and click **Deploy** and **Confirm**.
+11. In the Deploy dialog, add the Service Account identifier. 
 
-12. Click **Overview** and verify that your sharedflow is deployed to **eval**.
+    <ql-infobox>
+    In the cloud shell open a new tab click (+), run the following command to get your service account.
+    </ql-infobox>
+
+    ```bash
+    gcloud iam service-accounts list --filter="'DISPLAY NAME': Service account for Apigee to access Google services"
+    ```
+
+12. Copy the **EMAIL** value an past into the **service account** field of the Deploy dialog.
+
+13. Click **Overview** and verify that your sharedflow is deployed to **eval**.
 
 
 ## Task 5. Implementing reCAPTCHA validation in an existing proxy

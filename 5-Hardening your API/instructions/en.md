@@ -333,9 +333,21 @@ Apigee provides a policy that can validate the payload provided in Task 2 and ra
 
 12. Click **Save** and **Save as New Revision**.
 
-13. Click **Deploy** and **Confirm** in the second dialog.
+13. Click **Deploy**.
 
-14. Wait for your proxy to deploy and then repeat steps 2, 3, and 4. This time, you should receive the following error when you click **Send**.
+14. In the Deploy dialog, add the Service Account identifier. 
+
+    <ql-infobox>
+    In the cloud shell open a new tab click (+), run the following command to get your service account.
+    </ql-infobox>
+
+    ```bash
+    gcloud iam service-accounts list --filter="'DISPLAY NAME': Service account for Apigee to access Google services"
+    ```
+
+15. Copy the **EMAIL** value an past into the **service account** field of the Deploy dialog.
+
+16. Wait for your proxy to deploy and then repeat steps 2, 3, and 4. This time, you should receive the following error when you click **Send**.
 
     ```json
     {
@@ -348,7 +360,7 @@ Apigee provides a policy that can validate the payload provided in Task 2 and ra
     }
     ```
 
-15. To test that the malicious array element is triggering the error, remove the following from the payload, including the trailing comma (,).  
+17. To test that the malicious array element is triggering the error, remove the following from the payload, including the trailing comma (,).  
 
     ```json
     "Customers": [
@@ -361,7 +373,7 @@ Apigee provides a policy that can validate the payload provided in Task 2 and ra
     </ql-infobox>
 
 
-16. To resubmit the payload, click **Send**. This time, the new supplier should be added.
+18. To resubmit the payload, click **Send**. This time, the new supplier should be added.
 
     <ql-infobox>
     You have now improved the security of your API. In production you would add a policy for each API endpoint and an overall policy that is slightly more permissive to cover all endpoints. This could be implemented as a shared flow.

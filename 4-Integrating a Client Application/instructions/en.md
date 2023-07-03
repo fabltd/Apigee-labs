@@ -400,19 +400,21 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
 
 9. Click **Deploy**.
 
-10. In the Deploy dialog, add the Service Account identifier that you saved in an earlier lab.
+10. In the Deploy dialog, add the Service Account identifier. 
 
     <ql-infobox>
     In the cloud shell, run the following command to get your service account.
     </ql-infobox>
 
     ```bash
-    gcloud iam service-accounts list --filter="'DISPLAY NAME': sa-apigee-google-services"
+    gcloud iam service-accounts list --filter="'DISPLAY NAME': Service account for Apigee to access Google services"
     ```
 
-11. Click **overview** and verify that the proxy has been deployed successfully.
+11. Copy the **EMAIL** value an past into the **service account** field of the Deploy dialog.
 
-12. Return to Show Me Now and check the tracking number ```2nUz1hUbaQdfoS4Sktm9``` is still present. Click ***Get Progress*** and you should see the following.
+12. Click **overview** and verify that the proxy has been deployed successfully.
+
+13. Return to Show Me Now and check the tracking number ```2nUz1hUbaQdfoS4Sktm9``` is still present. Click ***Get Progress*** and you should see the following.
 
   ![tracking result](images/track.png)
 
