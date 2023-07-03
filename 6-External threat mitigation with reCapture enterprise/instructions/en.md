@@ -276,8 +276,6 @@ The Apigee Policies required to handle interaction with reCAPTCHA Enterprise hav
 ## Task 4. Add the reCAPTCHA shared flow
 
 1. In a separate browser tab from Google Cloud console, open the Apigee console at [apigee.google.com](https://apigee.google.com/).
-
-Alternatively, to open the Apigee console from the Google Cloud console Navigation menu (![Navigation menu icon](https://storage.googleapis.com/cloud-training/images/menu.png)), select **Tools > Apigee**.
     
 2. Verify that your Apigee Organization is selected at the top of the console.
 
@@ -330,6 +328,8 @@ Alternatively, to open the Apigee console from the Google Cloud console Navigati
     ```
 
 12. Copy the **EMAIL** value an past into the **service account** field of the Deploy dialog.
+
+13. Save the **EMAIL** you will **need this in the next Tasks !!!**
 
 13. Click **Overview** and verify that your sharedflow is deployed to **eval**.
 
