@@ -110,7 +110,6 @@ In this lab, you learn how to:
 9. To clone the class repository and move into the repository root folder, execute the following commands.
 
     ```bash
-    git clone https://github.com/fabltd/Apigee-utils
     cd ~/Apigee-utils
     ```
 
@@ -338,7 +337,7 @@ You have successfully tested that the proxy works in your development environmen
     The dev environment needs to be added to an Environment Group to allow for incoming traffic.
     </ql-infobox>
 
-4. To add **dev** to an Environment Group, navigate to **Admin > Environments > Groups** and click the pencil icon (![pencil icon](images/pencil.png)) that appears when the mouse is over the **eval** Environment group.
+4. To add **dev** to an Environment Group, navigate to **Admin > Environments > Groups** and click the pencil icon (![pencil icon](images/pencil.png)) that appears when the mouse is over the **test-env-group** Environment group.
 
 5. Locate the **Environments** panel at the bottom of the page and click **+**.
 
@@ -348,7 +347,7 @@ You have successfully tested that the proxy works in your development environmen
     The dev environment also needs to be added to a runtime instance. 
     </ql-infobox>
 
-7. To add **dev** to an runtime instance, navigate to **Admin > Instances** and click **eval-instance**.
+7. To add **dev** to an runtime instance, navigate to **Admin > Instances** and click **apigee-tf-inst**.
 
 8.  Click **Edit**, locate Environments inside the dialog, click in the dropdown and select **dev**.
 
